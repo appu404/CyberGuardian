@@ -12,4 +12,5 @@ app = FastAPI(
     version=settings.VERSION,
 )
 
+
 app.include_router(router)
