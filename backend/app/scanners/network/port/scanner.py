@@ -1,3 +1,4 @@
+from .services import PORT_SERVICES
 import socket
 from datetime import datetime
 
@@ -39,12 +40,19 @@ class PortScanner(BaseScanner):
 
         for port in self.ports:
             if self._scan_port(port):
-                open_ports.append(port)
+                open_ports.append(
+                    {
+                        "port": port,
+                        "service": PORT_SERVICES.get(port, "Unknown"),
+                    }
+                )
 
         result.status = ScanStatus.COMPLETED
         result.finished_at = datetime.utcnow()
         result.results = {
-            "open_ports": open_ports
+            "ports_scanned": len(self.ports),
+            "open_port_count": len(open_ports),
+            "open_ports": open_ports,
         }
 
         return result
